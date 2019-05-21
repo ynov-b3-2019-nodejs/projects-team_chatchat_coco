@@ -1,0 +1,24 @@
+{
+  "name": "cocos_work_chats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ynov-b3-2019-nodejs/projects-team_chatchat_coco.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ynov-b3-2019-nodejs/projects-team_chatchat_coco/issues"
+  },
+  "homepage": "https://github.com/ynov-b3-2019-nodejs/projects-team_chatchat_coco#readme",
+  "dependencies": {
+    "ent": "^2.2.0",
+    "express": "^4.17.0",
+    "socket.io": "^2.2.0"
+  }
+}
