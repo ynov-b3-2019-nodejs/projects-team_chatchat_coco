@@ -1,24 +1,19 @@
-const app = require('express')()
-const server = require('http').createServer(app)
-const io = require('socket.io').listen(server)
-const ent = require('ent')
+const express = require('express');
+const mongoose = require('mongoose');
+const nunjucks = require('nunjucks');
+
+mongoose.connect('mongodb://localhost/chat_coco', {useNewUrlParser: true});
+require('./models/User');
 
 
-app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/Client/index.html');
+const app = express();
+
+app.use('/static', express.static('static'));
+app.use(require('./routes/accueil'));
+
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
 });
 
-io.sockets.on('connection', function (socket, pseudo) {
-    socket.on('nouveau_client', function (pseudo) {
-        pseudo = ent.encode(pseudo);
-        socket.pseudo = pseudo;
-        socket.broadcast.emit('nouveau_client', pseudo);
-    });
-
-    socket.on('message', function (message) {
-        message = ent.encode(message);
-        socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
-    });
-});
-
-server.listen(8080);
+app.listen(3000);
