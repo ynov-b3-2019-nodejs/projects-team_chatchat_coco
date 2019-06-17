@@ -49,5 +49,6 @@ io.on('connection', function(socket){
     });
 });
 
+const port = (process.env.PORT || '3000');
 
-http.listen(3000, () => console.log('listening...'));
+http.listen(port, () => console.log('listening...'));
