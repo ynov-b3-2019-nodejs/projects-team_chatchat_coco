@@ -1,32 +1,50 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h2>utilisateurs :</h2>
+<h2>Créer un compte :</h2>
 
-{% for u in users %}
-<form action="POST">
+<form method="POST" action="/register">
     <div class="form-group">
-        <label>Pseudo</label>
-        <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Indiquez votre pseudonyme">
+        <label>Pseudonyme</label>
+        <input name="pseudo" type="text" class="form-control"
+               placeholder="Indiquez votre pseudonyme">
     </div>
     <div class="form-group">
         <label>Age</label>
-        <input type="password" class="form-control" placeholder="Indiquez votre âge">
+        <input name="age" type="text" class="form-control"
+               placeholder="Indiquez votre âge">
+    </div>
+
+    <div class="form-group">
+        <label>email</label>
+        <input name="email" type="text" class="form-control"
+               placeholder="Indiquez votre email">
+    </div>
+
+    <div class="form-group">
+        <label>password</label>
+        <input name="password" type="password" class="form-control" placeholder="Indiquez votre mot de passe">
     </div>
     <div class="form-group">
         <label>Sexe</label>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Choisissez votre sexe
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item">Homme</a>
-                <a class="dropdown-item">Femme</a>
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input name="sexe" class="form-check-input" type="radio" id="gridRadios1"
+                       value="homme" checked>
+                <label class="form-check-label" for="gridRadios1">
+                    Homme
+                </label>
+            </div>
+            <div class="form-check">
+                <input name="sexe" class="form-check-input" type="radio" id="gridRadios2"
+                       value="femme">
+                <label class="form-check-label" for="gridRadios2">
+                    Femme
+                </label>
             </div>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-{% endfor %}
 
 {% endblock %}

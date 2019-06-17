@@ -5,10 +5,12 @@ const nunjucks = require('nunjucks');
 const bodyparser = require('body-parser');
 const mult = require('multer');
 
-mongoose.connect('mongodb://localhost/chat_coco', {useNewUrlParser: true});
+const app = express();
+const http = require('http').createServer(app);
+
+mongoose.connect('mongodb://localhost/chat_coco', {useCreateIndex: true, useNewUrlParser: true});
 require('./models/User');
 
-const app = express();
 const ONE_HOUR = 1000 * 60 * 60;
 const {
     SESS_NAME = 'session_id',
@@ -31,11 +33,21 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use('/static', express.static('static'));
 app.use('/public', express.static('public'));
-app.use(require('./routes/accueil'));
+app.use('/scripts', express.static('scripts'));
+app.use(require('./routes/routes'));
 
 nunjucks.configure('public/views', {
     autoescape: true,
     express: app
 });
 
-app.listen(3000);
+const io = require('socket.io')(http);
+
+io.on('connection', function(socket){
+    socket.on('chat message', function(msg){
+        io.emit('chat message', msg);
+    });
+});
+
+
+http.listen(3000, () => console.log('listening...'));
