@@ -8,7 +8,7 @@ const mult = require('multer');
 const app = express();
 const http = require('http').createServer(app);
 
-mongoose.connect('mongodb://localhost/chat_coco', {useCreateIndex: true, useNewUrlParser: true});
+mongoose.connect('mongodb://heroku_9ps4kpj8:pviab5bpc7ksms1vh9qoa11ctc@ds239157.mlab.com:39157/heroku_9ps4kpj8', {useCreateIndex: true, useNewUrlParser: true});
 require('./models/User');
 
 const ONE_HOUR = 1000 * 60 * 60;
