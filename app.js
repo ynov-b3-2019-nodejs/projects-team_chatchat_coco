@@ -4,11 +4,17 @@ const mongoose = require('mongoose');
 const nunjucks = require('nunjucks');
 const bodyparser = require('body-parser');
 const mult = require('multer');
-
+const morgan = require('morgan');
+const jwt = require('jsonwebtoken');
 const app = express();
 const http = require('http').createServer(app);
 
-mongoose.connect('mongodb://heroku_9ps4kpj8:pviab5bpc7ksms1vh9qoa11ctc@ds239157.mlab.com:39157/heroku_9ps4kpj8', {useCreateIndex: true, useNewUrlParser: true});
+app.use(morgan('dev'));
+
+mongoose.connect('mongodb://heroku_9ps4kpj8:pviab5bpc7ksms1vh9qoa11ctc@ds239157.mlab.com:39157/heroku_9ps4kpj8', {
+    useCreateIndex: true,
+    useNewUrlParser: true
+});
 require('./models/User');
 
 const ONE_HOUR = 1000 * 60 * 60;
@@ -30,7 +36,7 @@ app.use(session({
     }
 }));
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.urlencoded({extended: true}));
 app.use('/static', express.static('static'));
 app.use('/public', express.static('public'));
 app.use('/scripts', express.static('scripts'));
@@ -43,8 +49,8 @@ nunjucks.configure('public/views', {
 
 const io = require('socket.io')(http);
 
-io.on('connection', function(socket){
-    socket.on('chat message', function(msg){
+io.on('connection', function (socket) {
+    socket.on('chat message', function (msg) {
         io.emit('chat message', msg);
     });
 });

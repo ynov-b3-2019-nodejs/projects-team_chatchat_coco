@@ -1,6 +1,11 @@
 const router = require('express').Router();
 const User = require('./../models/User');
 
+router.get('/users', function (req, res) {
+    User.find({}, function (err, users) {
+        res.json(users);
+    });
+});
 
 router.get('/', (req, res) => {
     User.find({}).then(users => {
@@ -9,7 +14,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/home', (req, res) => {
-        res.render('index.html');
+    res.render('index.html');
 });
 
 router.get('/login', (req, res) => {
@@ -31,20 +36,39 @@ router.get('/chat', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    if (req.body.email &&
-        req.body.password) {
-        const userData = {
-            email: req.body.email,
-            password: req.body.password,
-        };
-        User.findOne(userData, function (err, user) {
-            if (err) {
-                console.error(err)
+    // find the user
+    User.findOne({email: req.body.email}, function (err, user) {
+        console.log(req.body.email);
+        if (err) throw err;
+
+        if (!user) {
+            res.json({success: false, message: 'Authentication failed. User not found.'});
+        } else if (user) {
+
+            // check if password matches
+            if (user.password != req.body.password) {
+                res.json({success: false, message: 'Authentication failed. Wrong password.'});
             } else {
-                return res.redirect('/chat');
+
+                // if user is found and password is right
+                // create a token with only our given payload
+                // we don't want to pass in the entire user since that has the password
+                const payload = {
+                    admin: user.admin
+                };
+                const token = jwt.sign(payload, app.get('superSecret'), {
+                    expiresInMinutes: 1440 // expires in 24 hours
+                });
+
+                // return the information including token as JSON
+                res.json({
+                    success: true,
+                    message: 'Enjoy your token!',
+                    token: token
+                });
             }
-        });
-    }
+        }
+    });
 });
 
 router.post('/register', (req, res) => {
@@ -84,7 +108,5 @@ router.post('/post', (req, res) => {
         res.render('index.html', {users: users});
     })
 });
-
-
 
 module.exports = router;
