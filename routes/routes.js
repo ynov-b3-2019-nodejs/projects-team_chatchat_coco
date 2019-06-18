@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('./../models/User');
+const bcrypt = require('bcrypt');
 
 router.get('/users', function (req, res) {
     User.find({}, function (err, users) {
@@ -37,16 +38,17 @@ router.get('/chat', (req, res) => {
 
 router.post('/login', (req, res) => {
     // find the user
+    console.log(req.body.password);
     User.findOne({email: req.body.email}, function (err, user) {
-        console.log(req.body.email);
         if (err) throw err;
 
         if (!user) {
             res.json({success: false, message: 'Authentication failed. User not found.'});
         } else if (user) {
-
+            let hash = bcrypt.hashSync(req.body.password, 10);
+            console.log(hash);
             // check if password matches
-            if (user.password != req.body.password) {
+            if (user.password != hash) {
                 res.json({success: false, message: 'Authentication failed. Wrong password.'});
             } else {
 

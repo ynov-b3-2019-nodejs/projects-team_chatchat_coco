@@ -3,7 +3,6 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const nunjucks = require('nunjucks');
 const bodyparser = require('body-parser');
-const mult = require('multer');
 const morgan = require('morgan');
 const jwt = require('jsonwebtoken');
 const app = express();
